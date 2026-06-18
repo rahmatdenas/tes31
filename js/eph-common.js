@@ -258,14 +258,25 @@ function generateFigure(filename, classNames = []) {
       function(data) {
         let metadata = Object.values(data.query.pages)[0].imageinfo[0].extmetadata;
         
-        // Cek apakah metadata.Artist ada sebelum mengakses value-nya
+// Cek apakah metadata.Artist ada sebelum mengakses value-nya
         let artistHtml = '';
         if (metadata.Artist) {
             artistHtml = metadata.Artist.value.trim();
+            
+            // 1. Bersihkan semua tag HTML kecuali <a>
             artistHtml = artistHtml.replace(/<(?!\/?a ?)[^>]+>/g, '');
+            
+            // 2. KOREKSI TEKS GANDA: Bersihkan masalah "Unknown author" dari Wikimedia
+            artistHtml = artistHtml.replace(/Unknown authorUnknown author/gi, 'Unknown author');
+            artistHtml = artistHtml.replace(/UnknownUnknown/gi, 'Unknown'); // Jaga-jaga jika formatnya hanya "Unknown"
+            
+            // 3. Ubah tautan relatif menjadi absolut
             if (artistHtml.search('href="//') >= 0) {
               artistHtml = artistHtml.replace(/href="(?:https?:)?\/\//g, 'href="https://');
             }
+            
+            // 4. Sisipkan target="_blank"
+            artistHtml = artistHtml.replace(/<a /gi, '<a target="_blank" ');
         }
 
         let licenseHtml = '';
@@ -274,6 +285,7 @@ function generateFigure(filename, classNames = []) {
           licenseHtml = licenseHtml.replace(/-/g, '&#8209;');
           licenseHtml = `[${licenseHtml}]`;
           if (metadata.LicenseUrl) {
+            // Bagian lisensi ini sudah memiliki target="_blank", jadi aman!
             licenseHtml = `<a href="${metadata.LicenseUrl.value}" target="_blank">${licenseHtml}</a>`;
           }
           licenseHtml = ' ' + licenseHtml;
