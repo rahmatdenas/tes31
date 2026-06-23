@@ -5,9 +5,9 @@ const COMMONS_WIKI_URL_PREF   = 'https://commons.wikimedia.org/wiki/';
 const COMMONS_API_URL         = 'https://commons.wikimedia.org/w/api.php';
 const YEAR_PRECISION          = '9';
 const OSM_LAYER_URL           = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-const OSM_LAYER_ATTRIBUTION   = 'Base map &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>';
+const OSM_LAYER_ATTRIBUTION   = 'Base map © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>';
 const CARTO_LAYER_URL         = 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png';
-const CARTO_LAYER_ATTRIBUTION = 'Base map &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a> (data), <a href="https://carto.com/">CARTO</a> (style)';
+const CARTO_LAYER_ATTRIBUTION = 'Base map © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a> (data), <a href="https://carto.com/">CARTO</a> (style)';
 const TILE_LAYER_MAX_ZOOM     = 16;
 
 const MIN_PH_LAT              =   6.0;   
@@ -15,7 +15,6 @@ const MAX_PH_LAT              = -11.0;
 const MIN_PH_LON              =  95.0;   
 const MAX_PH_LON              = 141.0;   
 
-// Globals
 var Records = {};        
 var ProvinceIndex = {};  
 var SparqlValuesClause;  
@@ -61,7 +60,6 @@ function setupLandingForm() {
       return;
     }
     
-    // KUNCI: Bersihkan memori aplikasi dari data sebelumnya!
     resetApp();
     
     window.location.hash = '';
@@ -70,23 +68,19 @@ function setupLandingForm() {
   });
 }
 
-// === FUNGSI BARU: MESIN PENGHANCUR DATA LAMA ===
 function resetApp() {
   Records = {};
   ProvinceIndex = {};
   BootstrapDataIsLoaded = false;
   PrimaryDataIsLoaded = false;
   
-  // Mengatur ulang memori list
   currentFilteredRecords = [];
   currentRenderIndex = 0;
 
-  // Membersihkan marker dari peta
   if (Cluster) {
     Cluster.clearLayers();
   }
 
-  // Membersihkan daftar di HTML
   let indexList = document.getElementById('index-list');
   if (indexList) indexList.innerHTML = '';
 }
@@ -168,8 +162,6 @@ function processHashChange() {
   if (fragment === 'landing') {
     document.title = 'Mulai Eksplorasi – ' + BASE_TITLE;
     displayPanelContent('landing');
-    
-    // Perhatikan: Kode yang menyembunyikan peta dan melebarkan layar sudah saya hapus dari sini.
   }
   else if (fragment === 'about') {
     document.title = 'About – ' + BASE_TITLE;
@@ -249,7 +241,7 @@ function displayRecordDetails(qid) {
   }
 }
 
-function generateFigure(filename, title = "Bangunan", classNames = []) {
+function generateFigure(filename, title = "Situs", classNames = []) {
   if (filename) {
     let uniqueId = 'caption-' + Math.random().toString(36).substr(2, 9);
     loadJsonp(
@@ -276,8 +268,8 @@ function generateFigure(filename, title = "Bangunan", classNames = []) {
         }
         let licenseHtml = '';
         if (metadata.AttributionRequired && metadata.AttributionRequired.value === 'true') {
-          licenseHtml = metadata.LicenseShortName.value.replace(/ /g, '&nbsp;');
-          licenseHtml = licenseHtml.replace(/-/g, '&#8209;');
+          licenseHtml = metadata.LicenseShortName.value.replace(/ /g, ' ');
+          licenseHtml = licenseHtml.replace(/-/g, '‑');
           licenseHtml = `[${licenseHtml}]`;
           if (metadata.LicenseUrl) {
             licenseHtml = `<a href="${metadata.LicenseUrl.value}" target="_blank">${licenseHtml}</a>`;
