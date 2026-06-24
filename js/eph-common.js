@@ -50,7 +50,7 @@ function setupLandingForm() {
 
   dropdown.addEventListener('change', function() {
     if (this.value === 'custom') {
-      inputTxt.value = 'wd:Q'; 
+      inputTxt.value = 'wd:'; 
       inputTxt.readOnly = false;
       inputTxt.style.backgroundColor = '#ffffff';
       inputTxt.focus();
@@ -63,8 +63,8 @@ function setupLandingForm() {
 
   btnMulai.addEventListener('click', function() {
     let finalValue = inputTxt.value.trim();
-    if (finalValue === '' || finalValue === 'wd:Q') {
-      alert('Tolong masukkan parameter Q-ID yang benar sayang :)');
+    if (finalValue === '' || finalValue === 'wd:') {
+      alert('Anda belum memasukkan parameter Q-ID');
       return;
     }
     
